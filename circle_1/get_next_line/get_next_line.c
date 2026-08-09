@@ -40,10 +40,25 @@ static int	grow(t_save *s, size_t need)
 	return (1);
 }
 
+static void	compact(t_save *s)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < s->len)
+	{
+		s->data[i] = s->data[s->off + i];
+		i++;
+	}
+	s->off = 0;
+}
+
 static int	append(t_save *s, char *buf, size_t n)
 {
 	size_t	i;
 
+	if (s->off != 0)
+		compact(s);
 	if (!grow(s, s->len + n))
 		return (0);
 	i = 0;

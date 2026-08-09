@@ -20,9 +20,14 @@
 #  define BUFFER_SIZE 42
 # endif
 
+# ifndef LINE_DELIMITER
+#  define LINE_DELIMITER '\n'
+# endif
+
 typedef struct s_save
 {
 	char	*data;
+	size_t	off;
 	size_t	len;
 	size_t	cap;
 }	t_save;

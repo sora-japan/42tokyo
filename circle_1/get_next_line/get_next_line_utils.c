@@ -19,7 +19,7 @@ ssize_t	nl_pos(t_save *s, size_t from)
 	i = from;
 	while (i < s->len)
 	{
-		if (s->data[i] == '\n')
+		if (s->data[s->off + i] == LINE_DELIMITER)
 			return ((ssize_t)i);
 		i++;
 	}
@@ -30,6 +30,7 @@ void	reset_save(t_save *s)
 {
 	free(s->data);
 	s->data = NULL;
+	s->off = 0;
 	s->len = 0;
 	s->cap = 0;
 }
@@ -51,7 +52,7 @@ char	*str_line(t_save *s, size_t *len)
 	i = 0;
 	while (i < *len)
 	{
-		line[i] = s->data[i];
+		line[i] = s->data[s->off + i];
 		i++;
 	}
 	line[i] = '\0';
@@ -60,13 +61,8 @@ char	*str_line(t_save *s, size_t *len)
 
 void	consume(t_save *s, size_t len)
 {
-	size_t	i;
-
-	i = 0;
-	while (len + i < s->len)
-	{
-		s->data[i] = s->data[len + i];
-		i++;
-	}
-	s->len = i;
+	s->off += len;
+	s->len -= len;
+	if (s->len == 0)
+		s->off = 0;
 }
