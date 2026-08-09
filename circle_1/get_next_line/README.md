@@ -31,7 +31,7 @@ char	*get_next_line(int fd);
 - グローバル変数の使用は禁止
 - 42 の Norm に準拠すること
 
-> **スコープ:** 本実装は mandatory part を対象としています。`static` 変数は1つですが、複数の fd を同時に扱う bonus part には対応していません（後述の[制限事項](#制限事項)を参照）。
+> **スコープ:** 本実装は mandatory part を対象としています。`static` 変数は1つですが、複数の fd を同時に扱う bonus part には対応していません。
 
 ## Instructions
 
@@ -42,9 +42,6 @@ char	*get_next_line(int fd);
 | `get_next_line.h` | `t_save` 構造体の定義、プロトタイプ宣言、`BUFFER_SIZE` の既定値 | ✅ |
 | `get_next_line.c` | `get_next_line()` 本体と読み込み・バッファ拡張ロジック | ✅ |
 | `get_next_line_utils.c` | 補助関数群（改行探索・行の切り出し・バッファ操作） | ✅ |
-| `main.c` | 動作確認用のテストドライバ | ❌ |
-
-subject が要求するのは上の3ファイルのみで、`main.c` は提出対象外です（Norm チェックの対象にもなりません）。
 
 ### コンパイル
 
@@ -77,11 +74,11 @@ cc -Wall -Wextra -Werror -D BUFFER_SIZE=42 -D "LINE_DELIMITER='A'" \
 
 ### テスト用ビルドと実行
 
-`main.c` はカレントディレクトリの `test.txt` を1行ずつ読んで表示します。実行前に `test.txt` を用意してください。
+`test.c` はカレントディレクトリの `test.txt` を1行ずつ読んで表示します。実行前に `test.txt` を用意してください。
 
 ```sh
 printf 'hello\nworld\nno newline at eof' > test.txt
-cc -Wall -Wextra -Werror -D BUFFER_SIZE=42 get_next_line.c get_next_line_utils.c main.c -o gnl
+cc -Wall -Wextra -Werror -D BUFFER_SIZE=42 get_next_line.c get_next_line_utils.c test.c -o gnl
 ./gnl
 ```
 
@@ -235,18 +232,10 @@ typedef struct s_save
 - **標準入力**: `printf 'one\ntwo\n' | ./gnl` が2行を正しく返す
 - **異常系**: `fd = -1` は `NULL`。読み込み途中で `close()` された fd は `NULL` を返し、内部状態がリセットされるため、別のファイルを開き直せば先頭から正しく読み直せる
 
-### 制限事項
-
-`static` 変数が1つで、そこに fd を持たないため、**複数の fd を交互に読むことはできません**。fd 3 → fd 4 → fd 3 と呼ぶと、fd 4 の持ち越しが fd 3 の行として返ってしまいます。bonus part（`get_next_line_bonus.c` など）は未実装です。
-
-対応するなら、`t_save` に fd をキーとした配列（`t_save s[OPEN_MAX]`）または連結リストを持たせ、`s[fd]` を使う形に拡張します。`static` 変数の数は1つのままです。
-
 ## Resources
 
-- **man page** — `man 2 read`, `man 3 malloc`, `man 3 free`。使用が許可されている3関数の戻り値と異常系（特に `read()` の `0` と `-1` の違い）を確認するために参照
-- **42 の Norm（`norminette`）** — 関数あたり25行・変数5個・ファイルあたり5関数などの制約。関数分割の粒度はこの規約に合わせて決定
-- **動的配列の償却計算量** — 容量を2倍ずつ広げると追記1回あたりの平均コストが定数になる、という考え方（C++ の `std::vector`、Go の `slice` などで一般的に使われている手法）
-
+- **man page**
+- **42 の Norm（`norminette`）** 
 
 ### AI の利用について
 
