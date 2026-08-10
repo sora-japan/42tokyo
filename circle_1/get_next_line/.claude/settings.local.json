@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(paco --help)",
+      "Bash(command -v pdftotext)",
+      "Bash(command -v mutool)",
+      "Bash(python3 -c \"import sys; print\\('py ok'\\)\")",
+      "Bash(python3 -c \"import pypdf\")",
+      "Bash(python3 -c \"import PyPDF2\")",
+      "Bash(cd *)",
+      "Bash(mkdir -p /private/tmp/claude-501/-Users-s-cstudy-42-get-next-line/3b225dd8-4bc2-4fef-9644-355a0060c055/scratchpad/gnl)",
+      "Bash(cp -R /Users/s/francinette/tests/get_next_line/fsoares /private/tmp/claude-501/-Users-s-cstudy-42-get-next-line/3b225dd8-4bc2-4fef-9644-355a0060c055/scratchpad/gnl/fsoares)",
+      "Bash(cp /Users/s/cstudy/42/get_next_line/get_next_line.c /Users/s/cstudy/42/get_next_line/get_next_line_utils.c /Users/s/cstudy/42/get_next_line/get_next_line.h /private/tmp/claude-501/-Users-s-cstudy-42-get-next-line/3b225dd8-4bc2-4fef-9644-355a0060c055/scratchpad/gnl/)",
+      "Bash(time make EXEC_STRICT=1 mandatory)",
+      "Bash(python3 -)",
+      "Bash(clang -g -fsanitize=address -Wall -Wextra -Werror -Wno-deprecated-declarations -D BUFFER_SIZE=10 -D TIMEOUT=300 -D STRICT_MEM tester.c utils/malloc_mock.c utils/utils.c file_utils.c ../get_next_line.c ../get_next_line_utils.c -ldl -o t.out)",
+      "Bash(time ./t.out)",
+      "Bash(norminette get_next_line.c get_next_line_utils.c get_next_line.h main.c)",
+      "Bash(cp /Users/s/cstudy/42/get_next_line/get_next_line.c /Users/s/cstudy/42/get_next_line/get_next_line_utils.c /private/tmp/claude-501/-Users-s-cstudy-42-get-next-line/3b225dd8-4bc2-4fef-9644-355a0060c055/scratchpad/gnl/)",
+      "Bash(make EXEC_STRICT=1 mandatory)",
+      "Bash(git checkout *)",
+      "Bash(norminette get_next_line.c)",
+      "Bash(bash /Users/s/francinette/tester.sh --s)",
+      "Bash(cc -Wall -Wextra -Werror -c get_next_line.c -o /dev/null)",
+      "Bash(cc -Wall -Wextra -Werror -c get_next_line.c get_next_line_utils.c -o /dev/null)"
+    ]
+  }
+}
