@@ -236,6 +236,9 @@ typedef struct s_save
 
 - **man page**
 - **42 の Norm（`norminette`）** 
+- **償却解析** https://scrapbox.io/layerx/償却解析
+- **readについて**　https://kazmax.zpp.jp/cmd/r/read.2.html#google_vignette
+- **static変数** https://www.sejuku.net/blog/24205
 
 ### AI の利用について
 
