@@ -77,11 +77,13 @@ $ ./push_swap --simple 5 4 3 2 1
 # bench モードで disorder・戦略・命令数の内訳を確認
 $ ./push_swap --bench --adaptive 4 67 3 87 23 2>&1 1>/dev/null
 [bench] disorder:  40.00%
-[bench] strategy:  Adaptive / O(n√n)
-[bench] total_ops: 13
-[bench] sa: 0  sb: 0  ss: 0  pa: 5  pb: 5
-[bench] ra: 2  rb: 1  rr: 0  rra: 0  rrb: 0  rrr: 0
+[bench] strategy:  Adaptive / O(n²)
+[bench] total_ops: 11
+[bench] sa: 0  sb: 0  ss: 0  pa: 3  pb: 3
+[bench] ra: 4  rb: 0  rr: 0  rra: 1  rrb: 0  rrr: 0
 ```
+
+disorder は 40% で本来なら Medium 相当の区間ですが、要素数が5（6以下）のため n≤6 の例外処理で強制的に Simple が選ばれています（詳細は後述）。
 
 ### エラー処理
 
@@ -100,10 +102,10 @@ Error
 
 ### Bonus（checker）について
 
-現時点では、自作の `checker` プログラム（bonus 部分）は未実装です。動作確認には、42 から配布された `checker_Mac` バイナリを使用しています。
+現時点では、自作の `checker` プログラム（bonus 部分）は未実装です。動作確認には、42 から配布された `checker_linux` バイナリを使用しています。
 
 ```sh
-$ ./push_swap 3 2 1 0 | ./checker_Mac 3 2 1 0
+$ ./push_swap 3 2 1 0 | ./checker_linux 3 2 1 0
 OK
 ```
 
@@ -160,14 +162,25 @@ disorder ≥ 0.5         → Complex（O(n log n)）
 
 - **disorder < 0.2 → Simple（O(n²)）**
   ほぼ整列済みの入力では、各要素が本来の位置の近くに存在します。最小値抽出＋近い方向への回転（`ra` / `rra` の使い分け）は、わずかな回転で要素を所定位置へ運べるため、O(n²) クラスでも実際に生成される命令数は小さく収まります。実装が単純で1要素あたりの無駄な命令が少なく、この領域では基数ソートの固定オーバーヘッド（全ビット走査）よりも軽量に済みます。
-
 - **0.2 ≤ disorder < 0.5 → Medium（O(n√n)）**
   中程度に乱れた入力では、O(n²) は命令数が増えすぎる一方、基数ソートのオーバーヘッドはまだ見合いません。`√n` チャンク分割は「`b` へ退避 → `b` から戻す」の2段階で命令数を O(n√n) に抑えられ、実装の単純さと性能のバランスが取れた中間解になります。
-
 - **disorder ≥ 0.5 → Complex（O(n log n)）**
   完全ランダムに近い入力では O(n²)・O(n√n) は命令数が急増します。基数ソートは命令数の増加が最も緩やかで、乱雑度に依らず `log₂(n)` パスで確実にソートできるため、この領域で最良の選択になります。
 
 各分岐が呼び出す Simple / Medium / Complex は上記の通りそれぞれ独立に O(n²) / O(n√n) / O(n log n) を満たすため、disorder に応じてこの3つを振り分けるだけで、課題が要求する「disorder の区間ごとの計算量目標」を自動的に満たす設計になっています。
+
+**要素数が少ない場合（n ≤ 6）の例外処理**
+
+`main.c`（`build_stack`）で、スタックの要素数が6以下のときはdisorderの値にかかわらず強制的にSimpleを選択します。
+
+```c
+if (stack_size(ctx->a) <= 6)
+	ctx->dis_flg = 1;
+```
+
+- disorderが高くても（≥0.5でも）、この場合はSimpleが選ばれます。
+- **理由**: Simpleは入力サイズにかかわらず常に正しくソートできるため、disorderを無視しても正当性は損なわれません。一方Medium/Complexはチャンク分割や複数回のビット走査といった固定オーバーヘッドを持つため、nが小さいとその固定コストがSimpleのO(n²)実コストを上回ってしまい、かえって命令数が増えます。
+- n≤6という閾値は、Simpleの最悪計算量O(n²)（最大36回程度の走査・回転）が、Medium/Complexの固定オーバーヘッドより明らかに小さく収まる範囲として設定しました。
 
 **計算量（Push_swap モデルにおける upper bound）**
 
@@ -208,12 +221,12 @@ disorder = (逆転しているペアの数) / (全ペアの数)
 
 ### 参考資料
 
-[選択ソート]https://e-words.jp/w/選択ソート.html
-[選択ソート]https://www.codereading.com/algo_and_ds/algo/selection_sort.html
-[チャンク分割ソート]https://qiita.com/MoriP-K/items/54ee96dc634148cf40a8
-[基数ソート]https://tukumolog.com/radix-sort-introduction/
-[基数ソート]https://e-words.jp/w/基数ソート.html
-[基数ソート]https://www.hello-algo.com/ja/chapter_sorting/radix_sort/#11102
+- [選択ソート](https://e-words.jp/w/選択ソート.html)
+- [選択ソート](https://www.codereading.com/algo_and_ds/algo/selection_sort.html)
+- [チャンク分割ソート](https://qiita.com/MoriP-K/items/54ee96dc634148cf40a8)
+- [基数ソート](https://tukumolog.com/radix-sort-introduction/)
+- [基数ソート](https://e-words.jp/w/基数ソート.html)
+- [基数ソート](https://www.hello-algo.com/ja/chapter_sorting/radix_sort/#11102)
 - [Big-O notation — Wikipedia](https://en.wikipedia.org/wiki/Big_O_notation)
 - [Radix sort — Wikipedia](https://en.wikipedia.org/wiki/Radix_sort)
 - [Inversion (discrete mathematics) — Wikipedia](https://en.wikipedia.org/wiki/Inversion_(discrete_mathematics))（転倒数・disorder の計算根拠）

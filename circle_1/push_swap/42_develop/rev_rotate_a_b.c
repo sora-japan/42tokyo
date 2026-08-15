@@ -1,68 +1,55 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   rotate_a_b.c                                       :+:      :+:    :+:   */
+/*   rev_rotate_a_b.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: htakumi <htakumi@student.42tokyo.jp>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/25 01:53:00 by tfujikaw          #+#    #+#             */
-/*   Updated: 2026/07/19 12:37:26 by htakumi          ###   ########.fr       */
+/*   Created: 2026/05/25 02:48:54 by tfujikaw          #+#    #+#             */
+/*   Updated: 2026/07/19 12:37:18 by htakumi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
-#include <unistd.h>
 
-static int	rotate_a_b(t_swap **stack)
+static int	rev_rotate(t_swap **stack)
 {
-	t_swap	*first;
 	t_swap	*last;
+	t_swap	*first;
 
-	first = *stack;
 	if (!stack || !*stack || (*stack)->next == NULL)
 		return (0);
+	first = *stack;
 	last = *stack;
 	while (last->next)
 		last = last->next;
-	*stack = first->next;
-	(*stack)->pre = NULL;
+	last->pre->next = NULL;
 	last->next = first;
 	first->pre = last;
-	first->next = NULL;
+	last->pre = NULL;
+	*stack = last;
 	return (1);
 }
 
-void	rotate_ra(t_swap **stack_a, t_bench *bench)
+void	rev_rotate_a(t_swap **stack_a, t_bench *bench)
 {
-	if (rotate_a_b(stack_a) == 1)
-	{
-		write(1, "ra\n", 3);
-		bench->ra++;
-		bench->total++;
-	}
+	if (rev_rotate(stack_a) == 1)
+		report_op("rra\n", 4, &bench->rra, bench);
 }
 
-void	rotate_rb(t_swap **stack_b, t_bench *bench)
+void	rev_rotate_b(t_swap **stack_b, t_bench *bench)
 {
-	if (rotate_a_b(stack_b) == 1)
-	{
-		write(1, "rb\n", 3);
-		bench->rb++;
-		bench->total++;
-	}
+	if (rev_rotate(stack_b) == 1)
+		report_op("rrb\n", 4, &bench->rrb, bench);
 }
 
-void	rotate_rr(t_swap **stack_a, t_swap **stack_b, t_bench *bench)
+void	rev_rotate_r(t_swap **stack_a, t_swap **stack_b, t_bench *bench)
 {
 	int	check_a;
 	int	check_b;
 
-	check_a = rotate_a_b(stack_a);
-	check_b = rotate_a_b(stack_b);
+	check_a = rev_rotate(stack_a);
+	check_b = rev_rotate(stack_b);
 	if (check_a == 1 || check_b == 1)
-	{
-		write(1, "rr\n", 3);
-		bench->rr++;
-		bench->total++;
-	}
+		report_op("rrr\n", 4, &bench->rrr, bench);
 }
