@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 def input_temperature(temp_str: str) -> int:
     temp_int = int(temp_str)
     if temp_int < 0:
