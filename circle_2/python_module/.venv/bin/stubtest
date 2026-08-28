@@ -1,4 +1,4 @@
-#!/Users/s/cstudy/42/python_module/.venv/bin/python3.12
+#!/Users/s/Learning_Programming/42tokyo/circle_2/python_module/.venv/bin/python3.12
 import sys
 from mypy.stubtest import main
 if __name__ == '__main__':
