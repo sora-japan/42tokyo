@@ -1,5 +1,6 @@
 def ft_count_harvest_recursive():
     day = int(input("Days until harvest: "))
+
     def count_day(now):
         if now > day:
             print("Harvest time!")
