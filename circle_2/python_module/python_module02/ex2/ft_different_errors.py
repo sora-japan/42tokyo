@@ -1,23 +1,33 @@
 #!/usr/bin/env python3
 def garden_operations(operation_number):
     if operation_number == 0:
-        print("Testing operation 0...")
-        try:
-            raise ValueError(f"Caught ValueError: invalid literal for int() with base 10:'{operation_number}'")
-        except ValueError as e:
-            print(e)
+            int("abc")
     elif operation_number == 1:
-        print("Testing operation 1...")
-        raise ZeroDivisionError("")
+            result = 1 / 0
     elif operation_number == 2:
-        raise FileNotFoundError
+            open('/non/existent/file')
     elif operation_number == 3:
-        raise TypeError
+        "abc" + 1
     else:
         return
 
+def test_error_types():
+    print("=== Garden Error Types Demo ===")
+    for i in range(5):
+        print(f"Testing operation {i}...")
+        try:
+            garden_operations(i)
+            print("Operation completed successfully")
+        except ValueError as e:
+            print(f"Caught ValueError: {e}")
+        except ZeroDivisionError as e:
+            print(f"Caught ZeroDivisionError: {e}")
+        except FileNotFoundError as e:
+            print(f"Caught FileNotFoundError: {e}")
+        except TypeError as e:
+            print(f"Caught TypeError: {e}")
+    print("\nAll error types tested successfully!")
 
 if __name__ == "__main__":
-    print("=== Garden Error Types Demo ===")
-
+    test_error_types()
 
