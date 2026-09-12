@@ -17,6 +17,7 @@ class WaterError(GardenError):
 def check_plant():
     raise PlantError("The tomato plant is wilting!")
 
+
 def check_water():
     raise WaterError("Not enough water in the tank!")
 

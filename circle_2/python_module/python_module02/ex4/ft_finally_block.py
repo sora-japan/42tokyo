@@ -15,6 +15,7 @@ def water_plant(plant_name):
     else:
         raise PlantError(f"Invalid plant name to water:'{plant_name}'")
 
+
 def test_watering_system(plant_names):
     print("Opening watering system")
     try:
@@ -26,6 +27,7 @@ def test_watering_system(plant_names):
         return
     finally:
         print("Closing watering system")
+
 
 if __name__ == "__main__":
     print("=== Garden Watering System ===\n")

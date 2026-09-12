@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
 def garden_operations(operation_number):
     if operation_number == 0:
-            int("abc")
+        int("abc")
     elif operation_number == 1:
-            result = 1 / 0
+        1 / 0
     elif operation_number == 2:
-            open('/non/existent/file')
+        open('/non/existent/file')
     elif operation_number == 3:
         "abc" + 1
     else:
         return
+
 
 def test_error_types():
     print("=== Garden Error Types Demo ===")
@@ -28,6 +29,6 @@ def test_error_types():
             print(f"Caught TypeError: {e}")
     print("\nAll error types tested successfully!")
 
+
 if __name__ == "__main__":
     test_error_types()
-
